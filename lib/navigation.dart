@@ -11,7 +11,6 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       initialRoute: '/',
       routes: {
@@ -19,7 +18,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
         '/SecondScreen': (context) => const SecondScreen(),
         '/ThirdScreen': (context) => const ThirdScreen(),
       },
-
     );
   }
 }
@@ -34,7 +32,7 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreen extends State<FirstScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
@@ -48,86 +46,84 @@ class _FirstScreen extends State<FirstScreen> {
       'Index 2: ThirdScreen',
       style: optionStyle,
     ),
-
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      switch (_selectedIndex)
-      {case 0:  Navigator.popAndPushNamed(context,'/'); break;
-        case 1:  Navigator.popAndPushNamed(context,'/SecondScreen'); break;
-        case 2:  Navigator.popAndPushNamed(context,'/ThirdScreen'); break;
-      }
-    });
-  }
+  PreferredSizeWidget _appBar() => AppBar(
+        backgroundColor: Colors.lightBlue,
+        title: Text('Первая страница'),
+        toolbarHeight: 40,
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/');
+              },
+              child:
+                  Text('Главное окно', style: TextStyle(color: Colors.white))),
+          IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/SecondScreen');
+              },
+              icon: Icon(Icons.navigate_next)),
+          IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/ThirdScreen');
+              },
+              icon: Icon(Icons.skip_next)),
+        ],
+      );
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _navigationDraw() => Drawer(
+          child: ListView(padding: EdgeInsets.only(left: 10), children: [
+        DrawerHeader(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Container(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    child: Image.asset(
+                      "assets/fon.jpg",
+                    ),
+                  ),
+                  const Text("Навигация в проекте",
+                      textAlign: TextAlign.center),
+                ],
+              )),
+        ),
+        ListTile(
+          leading: const Icon(Icons.first_page),
+          title: const Text('Главная'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/');
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: const Icon(Icons.navigate_next),
+          title: const Text('Вторая страница'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/SecondScreen');
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: const Icon(Icons.skip_next),
+          title: const Text('Третья страница'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/ThirdScreen');
+          },
+        ),
+      ]));
 
-    return Scaffold(
-    appBar: AppBar(
-    backgroundColor: Colors.lightBlue,
-    title: Text('Первая страница'),
-    toolbarHeight: 40,
-    actions: <Widget> [
-
-    TextButton(onPressed: (){
-      Navigator.popAndPushNamed(context,'/');
-    }, child: Text('Главное окно', style: TextStyle(color: Colors.white))),
-    IconButton(onPressed: (){
-      Navigator.popAndPushNamed(context,'/SecondScreen');
-    }, icon: Icon(Icons.navigate_next)),
-    IconButton(onPressed: (){
-      Navigator.popAndPushNamed(context,'/ThirdScreen');
-    }, icon: Icon(Icons.skip_next)),
-    ],),
-    drawer: Drawer(
-    child: ListView(
-    padding: EdgeInsets.only(left: 10),
-    children: [
-    DrawerHeader(
-    decoration: const BoxDecoration(
-    color: Colors.white,
-    ), child: Container(
-    height: 200,
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-    Container(height: 100,
-    decoration: BoxDecoration (
-    borderRadius: BorderRadius.all(Radius.circular(50.0)),
-    ),
-    child: Image.asset("assets/fon.jpg", ),
-    ),
-    const Text("Навигация в проекте", textAlign: TextAlign.center),
-    ],
-    )
-    ),
-    ),
-    ListTile(
-    leading: const Icon(Icons.first_page),
-    title: const Text ('Главная'),
-    onTap: (){Navigator.popAndPushNamed(context,'/');},
-    ),
-    Divider(),
-    ListTile(
-    leading: const Icon(Icons.navigate_next),
-    title: const Text ('Вторая страница'),
-    onTap: (){Navigator.popAndPushNamed(context,'/SecondScreen');},
-    ),
-    Divider(),
-    ListTile(
-    leading: const Icon(Icons.skip_next),
-    title: const Text ('Третья страница'),
-    onTap: (){Navigator.popAndPushNamed(context,'/ThirdScreen');},
-    )
-    ,
-    ]
-    )
-    ),
-      bottomNavigationBar: BottomNavigationBar(
+  Widget _bottomNavigationBar() => BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -144,14 +140,36 @@ class _FirstScreen extends State<FirstScreen> {
             label: 'LastScreen',
             backgroundColor: Colors.purple,
           ),
-
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
-      ),
-    );
+      );
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      switch (_selectedIndex) {
+        case 0:
+          Navigator.popAndPushNamed(context, '/');
+          break;
+        case 1:
+          Navigator.popAndPushNamed(context, '/SecondScreen');
+          break;
+        case 2:
+          Navigator.popAndPushNamed(context, '/ThirdScreen');
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar(),
+      drawer: _navigationDraw(),
+      bottomNavigationBar: _bottomNavigationBar(),
+    );
   }
 }
 
@@ -165,7 +183,7 @@ class SecondScreen extends StatefulWidget {
 class _SecondScreen extends State<SecondScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
@@ -179,86 +197,84 @@ class _SecondScreen extends State<SecondScreen> {
       'Index 2: ThirdScreen',
       style: optionStyle,
     ),
-
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      switch (_selectedIndex)
-      {case 0:  Navigator.popAndPushNamed(context,'/'); break;
-        case 1:  Navigator.popAndPushNamed(context,'/SecondScreen'); break;
-        case 2:  Navigator.popAndPushNamed(context,'/ThirdScreen'); break;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
+  PreferredSizeWidget _appBar() => AppBar(
         backgroundColor: Colors.amber,
         title: Text('Вторая страница'),
         toolbarHeight: 40,
-        actions: <Widget> [
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/');
+              },
+              child:
+                  Text('Главное окно', style: TextStyle(color: Colors.white))),
+          IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/SecondScreen');
+              },
+              icon: Icon(Icons.navigate_next)),
+          IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/ThirdScreen');
+              },
+              icon: Icon(Icons.skip_next)),
+        ],
+      );
 
-          TextButton(onPressed: (){
-            Navigator.popAndPushNamed(context,'/');
-          }, child: Text('Главное окно', style: TextStyle(color: Colors.white))),
-          IconButton(onPressed: (){
-            Navigator.popAndPushNamed(context,'/SecondScreen');
-          }, icon: Icon(Icons.navigate_next)),
-          IconButton(onPressed: (){
-            Navigator.popAndPushNamed(context,'/ThirdScreen');
-          }, icon: Icon(Icons.skip_next)),
-        ],),
-      drawer: Drawer(
-          child: ListView(
-              padding: EdgeInsets.only(left: 10),
-              children: [
-                DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ), child: Container(
-                    height: 200,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(height: 100,
-                          decoration: BoxDecoration (
-                            borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                          ),
-                          child: Image.asset("assets/fon.jpg", ),
-                        ),
-                        const Text("Навигация в проекте", textAlign: TextAlign.center),
-                      ],
-                    )
-                ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.first_page),
-                  title: const Text ('Главная'),
-                  onTap: (){Navigator.popAndPushNamed(context,'/');},
-                ),
-                Divider(),
-                ListTile(
-                  leading: const Icon(Icons.navigate_next),
-                  title: const Text ('Вторая страница'),
-                  onTap: (){Navigator.popAndPushNamed(context,'/SecondScreen');},
-                ),
-                Divider(),
-                ListTile(
-                  leading: const Icon(Icons.skip_next),
-                  title: const Text ('Третья страница'),
-                  onTap: (){Navigator.popAndPushNamed(context,'/ThirdScreen');},
-                )
-                ,
-              ]
-          )
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+  Widget _navigationDraw() => Drawer(
+          child: ListView(padding: EdgeInsets.only(left: 10), children: [
+        DrawerHeader(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Container(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    child: Image.asset(
+                      "assets/fon.jpg",
+                    ),
+                  ),
+                  const Text("Навигация в проекте",
+                      textAlign: TextAlign.center),
+                ],
+              )),
+        ),
+        ListTile(
+          leading: const Icon(Icons.first_page),
+          title: const Text('Главная'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/');
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: const Icon(Icons.navigate_next),
+          title: const Text('Вторая страница'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/SecondScreen');
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: const Icon(Icons.skip_next),
+          title: const Text('Третья страница'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/ThirdScreen');
+          },
+        ),
+      ]));
+
+  Widget _bottomNavigationBar() => BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -275,16 +291,39 @@ class _SecondScreen extends State<SecondScreen> {
             label: 'LastScreen',
             backgroundColor: Colors.purple,
           ),
-
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
-      ),
-    );
+      );
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      switch (_selectedIndex) {
+        case 0:
+          Navigator.popAndPushNamed(context, '/');
+          break;
+        case 1:
+          Navigator.popAndPushNamed(context, '/SecondScreen');
+          break;
+        case 2:
+          Navigator.popAndPushNamed(context, '/ThirdScreen');
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar(),
+      drawer: _navigationDraw(),
+      bottomNavigationBar: _bottomNavigationBar(),
+    );
   }
 }
+
 class ThirdScreen extends StatefulWidget {
   const ThirdScreen({Key? key}) : super(key: key);
 
@@ -295,7 +334,7 @@ class ThirdScreen extends StatefulWidget {
 class _ThirdScreen extends State<ThirdScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
@@ -308,88 +347,85 @@ class _ThirdScreen extends State<ThirdScreen> {
     Text(
       'Index 2: ThirdScreen',
       style: optionStyle,
-
     ),
-
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      switch (_selectedIndex)
-      {case 0:  Navigator.popAndPushNamed(context,'/'); break;
-       case 1:  Navigator.popAndPushNamed(context,'/SecondScreen'); break;
-       case 2:  Navigator.popAndPushNamed(context,'/ThirdScreen'); break;
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
+  PreferredSizeWidget _appBar() => AppBar(
         backgroundColor: Colors.green,
         title: Text('Третья страница'),
         toolbarHeight: 40,
-        actions: <Widget> [
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/');
+              },
+              child:
+                  Text('Главное окно', style: TextStyle(color: Colors.white))),
+          IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/SecondScreen');
+              },
+              icon: Icon(Icons.navigate_next)),
+          IconButton(
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/ThirdScreen');
+              },
+              icon: Icon(Icons.skip_next)),
+        ],
+      );
 
-          TextButton(onPressed: (){
-            Navigator.popAndPushNamed(context,'/');
-          }, child: Text('Главное окно', style: TextStyle(color: Colors.white))),
-          IconButton(onPressed: (){
-            Navigator.popAndPushNamed(context,'/SecondScreen');
-          }, icon: Icon(Icons.navigate_next)),
-          IconButton(onPressed: (){
-            Navigator.popAndPushNamed(context,'/ThirdScreen');
-          }, icon: Icon(Icons.skip_next)),
-        ],),
-      drawer: Drawer(
-          child: ListView(
-              padding: EdgeInsets.only(left: 10),
-              children: [
-                DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ), child: Container(
-                    height: 200,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(height: 100,
-                          decoration: BoxDecoration (
-                            borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                          ),
-                          child: Image.asset("assets/fon.jpg", ),
-                        ),
-                        const Text("Навигация в проекте", textAlign: TextAlign.center),
-                      ],
-                    )
-                ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.first_page),
-                  title: const Text ('Главная'),
-                  onTap: (){Navigator.popAndPushNamed(context,'/');},
-                ),
-                Divider(),
-                ListTile(
-                  leading: const Icon(Icons.navigate_next),
-                  title: const Text ('Вторая страница'),
-                  onTap: (){Navigator.popAndPushNamed(context,'/SecondScreen');},
-                ),
-                Divider(),
-                ListTile(
-                  leading: const Icon(Icons.skip_next),
-                  title: const Text ('Третья страница'),
-                  onTap: (){Navigator.popAndPushNamed(context,'/ThirdScreen');},
-                )
-                ,
-              ]
-          )
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+  Widget _navigationDraw() => Drawer(
+          child: ListView(padding: EdgeInsets.only(left: 10), children: [
+        DrawerHeader(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Container(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    child: Image.asset(
+                      "assets/fon.jpg",
+                    ),
+                  ),
+                  const Text("Навигация в проекте",
+                      textAlign: TextAlign.center),
+                ],
+              )),
+        ),
+        ListTile(
+          leading: const Icon(Icons.first_page),
+          title: const Text('Главная'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/');
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: const Icon(Icons.navigate_next),
+          title: const Text('Вторая страница'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/SecondScreen');
+          },
+        ),
+        Divider(),
+        ListTile(
+          leading: const Icon(Icons.skip_next),
+          title: const Text('Третья страница'),
+          onTap: () {
+            Navigator.popAndPushNamed(context, '/ThirdScreen');
+          },
+        ),
+      ]));
+
+  Widget _bottomNavigationBar() => BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -406,13 +442,35 @@ class _ThirdScreen extends State<ThirdScreen> {
             label: 'LastScreen',
             backgroundColor: Colors.purple,
           ),
-
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
-      ),
-    );
+      );
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      switch (_selectedIndex) {
+        case 0:
+          Navigator.popAndPushNamed(context, '/');
+          break;
+        case 1:
+          Navigator.popAndPushNamed(context, '/SecondScreen');
+          break;
+        case 2:
+          Navigator.popAndPushNamed(context, '/ThirdScreen');
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _appBar(),
+      drawer: _navigationDraw(),
+      bottomNavigationBar: _bottomNavigationBar(),
+    );
   }
 }
